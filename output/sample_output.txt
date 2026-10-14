@@ -1,0 +1,219 @@
+NETFLIX CONTENT EXPLORER - SAMPLE RUN
+=======================================
+Dataset used    : R:\Games\projects\Netflix\data\netflix_titles.csv
+Titles analysed : 8,797 (8,807 raw rows, 10 dropped for a missing date_added)
+Keystrokes      : 1, 2, 3, 4, 5, 6, 7, dark, 8, 2019, 9, 10, 0
+                  (the menu asks for a number, then options 7 and 8 each
+                   ask one extra question - a keyword and a year)
+Covers          : menu options 1-10 and 0 (Quit)
+Reproduce with  : jupyter nbconvert --to notebook --execute --inplace \
+                    notebooks/netflix_analysis.ipynb
+=======================================
+
+
+==================================================
+NETFLIX CONTENT EXPLORER
+==================================================
+1. Count of Movies vs TV Shows
+2. Number of Titles Added Each Year
+3. Top 10 Producing Countries
+4. Top 5 Most Common Genres
+5. Rating Distribution
+6. Oldest and Newest Release Years
+7. Search Titles by Keyword
+8. Content Added in a Specific Year
+9. Total Unique Countries
+10. Summary Statistics on Release Year
+0. Quit
+
+
+==================================================
+MOVIES VS TV SHOWS
+==================================================
+Content Type  Count Percentage
+       Movie   6131     69.69%
+     TV Show   2666     30.31%
+
+Total titles: 8,797
+Most common type: Movie (6,131 titles, 69.69%)
+
+==================================================
+TITLES ADDED EACH YEAR
+==================================================
+ Year Added  Number of Titles
+       2008                 2
+       2009                 2
+       2010                 1
+       2011                13
+       2012                 3
+       2013                11
+       2014                24
+       2015                82
+       2016               429
+       2017              1188
+       2018              1649
+       2019              2016
+       2020              1879
+       2021              1498
+
+Total titles added : 8,797
+Years covered      : 2008 - 2021
+Number of years    : 14
+
+==================================================
+TOP 10 PRODUCING COUNTRIES
+==================================================
+ Rank        Country  Number of Titles
+    1  United States              3684
+    2          India              1046
+    3        Unknown               830
+    4 United Kingdom               805
+    5         Canada               445
+    6         France               393
+    7          Japan               317
+    8          Spain               232
+    9    South Korea               231
+   10        Germany               226
+
+Note: a title produced in several countries is counted once for each
+country, so these numbers add up to more than the 8,797 titles in
+the catalogue. Rows with no country listed appear as 'Unknown'.
+
+==================================================
+TOP 5 MOST COMMON GENRES
+==================================================
+ Rank                  Genre  Number of Titles
+    1   International Movies              2752
+    2                 Dramas              2427
+    3               Comedies              1674
+    4 International TV Shows              1350
+    5          Documentaries               869
+
+Note: one title can belong to several genres, so the genre counts
+add up to more than the 8,797 titles in the catalogue.
+
+==================================================
+RATING DISTRIBUTION
+==================================================
+   Rating  Number of Titles Percentage
+    TV-MA              3205     36.43%
+    TV-14              2157     24.52%
+    TV-PG               861      9.79%
+        R               799      9.08%
+    PG-13               490      5.57%
+    TV-Y7               333      3.79%
+     TV-Y               306      3.48%
+       PG               287      3.26%
+     TV-G               220      2.50%
+       NR                79      0.90%
+        G                41      0.47%
+ TV-Y7-FV                 6      0.07%
+Not Rated                 4      0.05%
+    NC-17                 3      0.03%
+       UR                 3      0.03%
+   66 min                 1      0.01%
+   74 min                 1      0.01%
+   84 min                 1      0.01%
+
+Distinct ratings   : 18
+Unrated titles     : 4
+Sorted by number of titles, most common first.
+
+==================================================
+OLDEST AND NEWEST RELEASE YEARS
+==================================================
+Oldest Release Year : 1925
+Newest Release Year : 2021
+Range (years)       : 96
+Missing years       : 0
+
+Oldest title(s) released in 1925 (1):
+  Pioneers: First Women Filmmakers*
+
+Newest title(s) released in 2021 (592):
+  Blood & Water, Ganglands, Jailbirds New Orleans, Kota Factory, Midnight Mass, ... (+587 more)
+
+==================================================
+SEARCH TITLES BY KEYWORD
+==================================================
+
+Matching titles for 'dark' (39):
+--------------------------------------------------
+                                                       Title    Type  Release Year Rating                                                            Genres
+                                                  Dark Skies   Movie          2013  PG-13                                   Horror Movies, Sci-Fi & Fantasy
+                            RESIDENT EVIL: Infinite Darkness TV Show          2021  TV-MA                             Anime Series, TV Horror, TV Thrillers
+                                            Trese After Dark   Movie          2021  TV-14                                     Anime Features, Documentaries
+                    The Sons of Sam: A Descent into Darkness TV Show          2021  TV-MA                                        Crime TV Shows, Docuseries
+                                            The Darkest Hour   Movie          2011  PG-13                              Action & Adventure, Sci-Fi & Fantasy
+                                  Dark City Beneath the Beat   Movie          2020  TV-MA                                   Documentaries, Music & Musicals
+                      Satria Heroes: Revenge of the Darkness   Movie          2017   TV-G                                          Children & Family Movies
+                                                 Dark Forces   Movie          2020  TV-MA           Horror Movies, Independent Movies, International Movies
+                                      We Summon the Darkness   Movie          2020      R                                          Horror Movies, Thrillers
+                                                 In The Dark TV Show          2020  TV-14                                         Crime TV Shows, TV Dramas
+                                                 Dark Desire TV Show          2020  TV-MA Crime TV Shows, International TV Shows, Spanish-Language TV Shows
+                                                        Dark TV Show          2020  TV-MA                 Crime TV Shows, International TV Shows, TV Dramas
+                                                 Dark Waters   Movie          1956  TV-14                      Classic Movies, Dramas, International Movies
+                                                The Darkness   Movie          2016  PG-13                                          Horror Movies, Thrillers
+                                           Light in the Dark   Movie          2019  TV-14                                      Dramas, International Movies
+                                                  Dark Light   Movie          2019  TV-MA               Horror Movies, Independent Movies, Sci-Fi & Fantasy
+                            Night on Earth: Shot in the Dark   Movie          2020  TV-PG                                                            Movies
+                                    Monsters: Dark Continent   Movie          2014      R                    Action & Adventure, Dramas, Independent Movies
+The Crystal Calls Making the Dark Crystal: Age of Resistance   Movie          2019  TV-PG                               Documentaries, International Movies
+                         The Dark Crystal: Age of Resistance TV Show          2019  TV-PG             TV Action & Adventure, TV Dramas, TV Sci-Fi & Fantasy
+... and 19 more matches. Use a longer keyword, or raise MAX_ROWS_SHOWN.
+
+==================================================
+CONTENT ADDED IN A SPECIFIC YEAR
+==================================================
+
+2016 title(s) added in 2019:
+--------------------------------------------------
+                                      Title    Type  Release Year Rating Date Added
+                                     Aaviri   Movie          2019  TV-14 2019-12-31
+       Albert Pinto Ko Gussa Kyun Aata Hai?   Movie          2019  TV-MA 2019-12-31
+                    ARASHI's Diary -Voyage- TV Show          2019  TV-PG 2019-12-31
+             Benchwarmers 2: Breaking Balls   Movie          2019  PG-13 2019-12-31
+                                 How High 2   Movie          2019  TV-MA 2019-12-31
+                                   Occupied TV Show          2019  TV-MA 2019-12-31
+                         Pucca: Love Recipe TV Show          2018  TV-Y7 2019-12-31
+                               Rainbow Ruby TV Show          2016   TV-Y 2019-12-31
+                               Robot Trains TV Show          2018  TV-Y7 2019-12-31
+                            The Degenerates TV Show          2019  TV-MA 2019-12-31
+          Yanxi Palace: Princess Adventures TV Show          2019  TV-14 2019-12-31
+The Disastrous Life of Saiki K.: Reawakened TV Show          2019  TV-14 2019-12-30
+                Hot Gimmick: Girl Meets Boy   Movie          2019  TV-MA 2019-12-28
+                            Blitz Patrollie   Movie          2013  TV-MA 2019-12-27
+                    El Pepe, a Supreme Life   Movie          2018  TV-14 2019-12-27
+             Kevin Hart: Don’t F**k This Up TV Show          2019  TV-MA 2019-12-27
+                                 The Vendor   Movie          2018  TV-MA 2019-12-27
+                                    The App   Movie          2019  TV-MA 2019-12-26
+                     The Bonfire of Destiny TV Show          2019  TV-MA 2019-12-26
+                                        You TV Show          2019  TV-MA 2019-12-26
+... and 1996 more titles. Raise MAX_ROWS_SHOWN to print all of them.
+
+==================================================
+TOTAL UNIQUE COUNTRIES
+==================================================
+Total Unique Countries: 123
+Excluding 'Unknown'   : 122
+
+Documented choice: 'Unknown' is included in the headline number because
+it is a real value in the cleaned data (titles with no country listed).
+The second line shows how many countries are actually named.
+
+==================================================
+SUMMARY STATISTICS ON RELEASE YEAR (NUMPY)
+==================================================
+Count (valid values)  : 8797
+Count (missing values): 0
+Mean Release Year    : 2014.18
+Median Release Year  : 2017
+Minimum Release Year : 1925
+Maximum Release Year : 2021
+Standard Deviation   : 8.82
+Std Dev (sample)     : 8.82
+Q1 Release Year      : 2013
+Q3 Release Year      : 2019
+Interquartile Range  : 6 years
+
+Goodbye! Thanks for using the Netflix Content Explorer.

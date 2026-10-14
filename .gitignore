@@ -1,0 +1,54 @@
+# ---------------------------------------------------------------
+# Netflix Content Explorer - Python / Jupyter .gitignore
+# ---------------------------------------------------------------
+
+# Virtual environments (Windows and Linux/macOS)
+.venv/
+venv/
+env/
+ENV/
+
+# Byte-compiled / cache files
+__pycache__/
+*.pyc
+*.py[cod]
+*$py.class
+*.so
+
+# Packaging / build artefacts
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Jupyter Notebook checkpoints and generated output
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Testing / coverage
+.coverage
+htmlcov/
+.tox/
+
+# Environment variables and secrets (.env should never be committed)
+.env
+.env.*
+!.env.example
+
+# Operating system clutter
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editors
+.idea/
+.vscode/
+*.swp
+
+# NOTE: data/ is intentionally NOT ignored. The dataset
+# (data/netflix_titles.csv) is tracked so the project stays reproducible for
+# anyone who clones the repository. data/.gitkeep only exists so the folder is
+# present before the CSV is downloaded.

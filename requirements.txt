@@ -1,0 +1,16 @@
+# Netflix Content Explorer - Python dependencies
+# Install with:  pip install -r requirements.txt
+
+# Data manipulation and analysis.
+# pandas >= 2.0 is required because date_added is parsed with
+# pd.to_datetime(..., format="mixed"), which only exists from pandas 2.0.
+pandas>=2.0,<3.0
+
+# Required by the project brief for the release-year summary statistics
+# (np.mean, np.median, np.min, np.max, np.std).
+numpy>=1.24,<3.0
+
+# Notebook environment. Installing the 'jupyter' meta-package provides
+# both the classic `jupyter notebook` server and JupyterLab, so no extra
+# dependency is needed.
+jupyter>=1.0.0
