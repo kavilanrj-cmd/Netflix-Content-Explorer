@@ -10,6 +10,11 @@ pandas>=2.0,<3.0
 # (np.mean, np.median, np.min, np.max, np.std).
 numpy>=1.24,<3.0
 
+# Used by notebook section 12 to draw the six charts (Movies vs TV Shows,
+# titles added per year, top countries, top genres, rating distribution and
+# the release-year histogram).
+matplotlib>=3.7,<4.0
+
 # Notebook environment. Installing the 'jupyter' meta-package provides
 # both the classic `jupyter notebook` server and JupyterLab, so no extra
 # dependency is needed.

@@ -1,7 +1,9 @@
 NETFLIX CONTENT EXPLORER - SAMPLE RUN
 =======================================
-Dataset used    : R:\Games\projects\Netflix\data\netflix_titles.csv
-Titles analysed : 8,797 (8,807 raw rows, 10 dropped for a missing date_added)
+Dataset used    : data/netflix_titles.csv
+General rows    : 8,807  (used by options 1, 3, 4, 5, 6, 7, 9, 10)
+Date-valid rows : 8,797  (used by options 2 and 8)
+Rows dropped for a missing date_added: 10
 Keystrokes      : 1, 2, 3, 4, 5, 6, 7, dark, 8, 2019, 9, 10, 0
                   (the menu asks for a number, then options 7 and 8 each
                    ask one extra question - a keyword and a year)
@@ -31,11 +33,11 @@ NETFLIX CONTENT EXPLORER
 MOVIES VS TV SHOWS
 ==================================================
 Content Type  Count Percentage
-       Movie   6131     69.69%
-     TV Show   2666     30.31%
+       Movie   6131     69.62%
+     TV Show   2676     30.38%
 
-Total titles: 8,797
-Most common type: Movie (6,131 titles, 69.69%)
+Total titles: 8,807
+Most common type: Movie (6,131 titles, 69.62%)
 
 ==================================================
 TITLES ADDED EACH YEAR
@@ -64,19 +66,19 @@ Number of years    : 14
 TOP 10 PRODUCING COUNTRIES
 ==================================================
  Rank        Country  Number of Titles
-    1  United States              3684
+    1  United States              3690
     2          India              1046
-    3        Unknown               830
-    4 United Kingdom               805
+    3        Unknown               831
+    4 United Kingdom               806
     5         Canada               445
     6         France               393
-    7          Japan               317
+    7          Japan               318
     8          Spain               232
     9    South Korea               231
    10        Germany               226
 
 Note: a title produced in several countries is counted once for each
-country, so these numbers add up to more than the 8,797 titles in
+country, so these numbers add up to more than the 8,807 titles in
 the catalogue. Rows with no country listed appear as 'Unknown'.
 
 ==================================================
@@ -86,26 +88,26 @@ TOP 5 MOST COMMON GENRES
     1   International Movies              2752
     2                 Dramas              2427
     3               Comedies              1674
-    4 International TV Shows              1350
+    4 International TV Shows              1351
     5          Documentaries               869
 
 Note: one title can belong to several genres, so the genre counts
-add up to more than the 8,797 titles in the catalogue.
+add up to more than the 8,807 titles in the catalogue.
 
 ==================================================
 RATING DISTRIBUTION
 ==================================================
    Rating  Number of Titles Percentage
-    TV-MA              3205     36.43%
-    TV-14              2157     24.52%
-    TV-PG               861      9.79%
-        R               799      9.08%
-    PG-13               490      5.57%
-    TV-Y7               333      3.79%
-     TV-Y               306      3.48%
+    TV-MA              3207     36.41%
+    TV-14              2160     24.53%
+    TV-PG               863      9.80%
+        R               799      9.07%
+    PG-13               490      5.56%
+    TV-Y7               334      3.79%
+     TV-Y               307      3.49%
        PG               287      3.26%
      TV-G               220      2.50%
-       NR                79      0.90%
+       NR                80      0.91%
         G                41      0.47%
  TV-Y7-FV                 6      0.07%
 Not Rated                 4      0.05%
@@ -197,14 +199,14 @@ TOTAL UNIQUE COUNTRIES
 Total Unique Countries: 123
 Excluding 'Unknown'   : 122
 
-Documented choice: 'Unknown' is included in the headline number because
-it is a real value in the cleaned data (titles with no country listed).
-The second line shows how many countries are actually named.
+Documented rule: 'Unknown' is included in the total because it is a
+real value in the cleaned data (titles with no country listed). The
+second line shows how many countries are actually named.
 
 ==================================================
 SUMMARY STATISTICS ON RELEASE YEAR (NUMPY)
 ==================================================
-Count (valid values)  : 8797
+Count (valid values)  : 8,807
 Count (missing values): 0
 Mean Release Year    : 2014.18
 Median Release Year  : 2017

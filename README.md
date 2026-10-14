@@ -4,7 +4,7 @@ A menu-driven Python data-analysis application built on the **Netflix Titles
 Dataset**. It loads the catalogue, cleans it, and answers ten business questions
 about the content — what dominates the library, who produces it, which genres
 and ratings are most common, how the catalogue grew over time, and how the
-release years are distributed.
+release years are distributed — then charts the results with Matplotlib.
 
 Everything runs inside a single, well-commented Jupyter Notebook. There is no
 web framework, no database, no API and no authentication.
@@ -18,7 +18,7 @@ web framework, no database, no API and no authentication.
 | **Project type** | Minor project — Artificial Intelligence / Data Science |
 | **Deliverable** | `notebooks/netflix_analysis.ipynb` |
 | **Dataset** | Netflix Titles Dataset (Kaggle) |
-| **Libraries** | Pandas, NumPy, Jupyter Notebook |
+| **Libraries** | Pandas, NumPy, Matplotlib, Jupyter Notebook |
 | **Interface** | Console menu with 10 analysis options + quit |
 
 The notebook follows the standard data-analysis workflow:
@@ -26,10 +26,12 @@ The notebook follows the standard data-analysis workflow:
 1. **Import** the libraries.
 2. **Load** `data/netflix_titles.csv` into a Pandas `DataFrame`.
 3. **Explore** the raw data — shape, dtypes, head/tail, `info()`, missing values.
-4. **Clean** it — fill missing text fields, drop unusable rows, parse dates.
+4. **Clean** it — fill missing text fields, parse dates, keep a date-valid view.
 5. **Engineer features** — derive `year_added`, split multi-value cells.
 6. **Analyse** it — ten functions answering ten business questions.
-7. **Present** the results through a menu, like a small tool a content
+7. **Visualise** it — six charts that summarise the findings.
+8. **Test** it — a `unittest` suite that runs when the notebook is executed.
+9. **Present** the results through a menu, like a small tool a content
    strategist could actually use.
 
 ---
@@ -38,11 +40,11 @@ The notebook follows the standard data-analysis workflow:
 
 | Item | Value |
 | --- | --- |
-| Dataset name | Netflix Titles Dataset (Netflix Shows) |
-| Source | Kaggle — [samersalem/netflix-shows](https://www.kaggle.com/datasets/samersalem/netflix-shows) |
+| Dataset name | Netflix Shows (Netflix Titles Dataset) |
+| Source | Kaggle — [shivamb/netflixshows](https://www.kaggle.com/datasets/shivamb/netflixshows) |
 | File name | `netflix_titles.csv` |
 | Location | `data/netflix_titles.csv` |
-| Approximate size | 8,807 rows × 12 columns |
+| Size | 8,807 rows × 12 columns |
 | Row meaning | one Netflix title (a Movie or a TV Show) |
 
 ### Columns
@@ -133,13 +135,21 @@ file and `df_raw` are never modified.
 | B | Missing `director` → `"Not Listed"` | Makes "no director listed" explicit and greppable. |
 | C | Missing `cast` → `"Not Listed"` | Same idea for the cast column. |
 | D | Missing `rating` → `"Not Rated"` | The distribution then shows the true count, including unrated titles. |
-| E | Drop rows with a missing `date_added` | Without it the row cannot contribute to any time-based analysis. |
+| E | Parse `date_added`; build a separate date-valid view | Turns the text into real datetimes and isolates the 10 rows without a date. |
 | F | Create `year_added` from `date_added` | Turns a date into a number that can be counted per year. |
 
-**Why fill for A–D but drop for E?** A–D are descriptive text columns; deleting
-thousands of otherwise valid titles would distort every count in the project.
-`date_added` is different — the year of addition drives options 2 and 8, so a
-row without it is unusable.
+**Why fill for A–D but keep every row for E?** A–D are descriptive text
+columns; deleting thousands of otherwise valid titles would distort every count
+in the project. `date_added` is different: the year of addition drives options 2
+and 8, so the notebook keeps **two views** of the same cleaned data:
+
+* `df` — the **general dataset**, all **8,807** rows. Used by options 1, 3, 4,
+  5, 6, 7, 9 and 10.
+* `df_dated` — the **date-valid dataset**, **8,797** rows (the 10 titles with no
+  `date_added` removed). Used only by options 2 and 8.
+
+This way the 10 titles without a date are still counted by every question that
+does not need one, instead of being dropped from the whole project.
 
 Two details worth noting:
 
@@ -154,7 +164,27 @@ Two details worth noting:
 
 Feature engineering then adds `release_year` as a nullable integer, plus
 `release_decade`, `duration_minutes` and the exploded `country_rows` /
-`genre_rows` tables.
+`genre_rows` tables. On the real data these hold **10,843** country rows
+(**123** distinct countries) and **19,323** genre rows (**42** distinct genres).
+
+---
+
+## Visualizations
+
+Section 12 turns the key results into six Matplotlib charts, each built from the
+already-cleaned data (nothing is hard-coded) and each guarded against an empty
+dataset with a friendly "No data available" message:
+
+| Chart | Figure | Insight shown |
+| --- | --- | --- |
+| 1 | Movies vs TV Shows | The movie-led shape of the catalogue (6,131 vs 2,676). |
+| 2 | Number of Titles Added Each Year | The steep climb to a 2019 peak, then the slowdown. |
+| 3 | Top 10 Producing Countries | Horizontal bars keep long country names readable. |
+| 4 | Top 5 Most Common Genres | Genre concentration after splitting multi-genre cells. |
+| 5 | Rating Distribution | The adult-oriented skew (TV-MA and TV-14 dominate). |
+| 6 | Release-Year Distribution | A histogram showing the 2013–2019 concentration. |
+
+The rendered charts are stored as PNG output inside the executed notebook.
 
 ---
 
@@ -165,11 +195,14 @@ Feature engineering then adds `release_year` as a nullable integer, plus
 | Python | 3.12 (3.10+ works) | Application logic and the menu |
 | Pandas | >= 2.0 | Loading, cleaning, grouping and counting |
 | NumPy | >= 1.24 | Release-year summary statistics |
+| Matplotlib | >= 3.7 | The six charts in section 12 |
 | Jupyter Notebook | >= 1.0 | The executable deliverable |
 
 No other third-party package is used — no web framework, database, API or
 terminal-UI library. `pandas>=2.0` is required because `date_added` is parsed
 with `pd.to_datetime(..., format="mixed")`, which only exists from Pandas 2.0.
+The automated tests use the standard-library `unittest` module, so they add no
+dependency.
 
 ---
 
@@ -208,8 +241,10 @@ Netflix_Content_Explorer/
 | 9 | Analysis Functions |
 | 10 | Menu-Driven Program |
 | 11 | Sample Run |
-| 12 | Three Business Insights |
-| 13 | Conclusion |
+| 12 | Visualizations |
+| 13 | Three Business Insights |
+| 14 | Automated Tests |
+| 15 | Conclusion |
 
 ---
 
@@ -232,7 +267,7 @@ python -m venv .venv
 pip install -r requirements.txt
 
 :: 4. Place netflix_titles.csv inside data\
-::    (download from https://www.kaggle.com/datasets/samersalem/netflix-shows)
+::    (download from https://www.kaggle.com/datasets/shivamb/netflixshows)
 
 :: 5. Launch Jupyter Notebook
 jupyter notebook
@@ -297,21 +332,24 @@ the two interactive options (option 7 → `dark`, which matches 39 real titles;
 option 8 → `2019`, the peak year with 2,016 titles).
 
 It was produced automatically by section 11.1 of the notebook and carries a
-header recording the dataset path, the title counts and the exact keystrokes
+header recording the dataset path, the two row counts and the exact keystrokes
 used, followed by the untouched console transcript.
 
 ```
 NETFLIX CONTENT EXPLORER - SAMPLE RUN
 =======================================
-Dataset used    : .../data/netflix_titles.csv
-Titles analysed : 8,797 (8,807 raw rows, 10 dropped for a missing date_added)
+Dataset used    : data/netflix_titles.csv
+General rows    : 8,807  (used by options 1, 3, 4, 5, 6, 7, 9, 10)
+Date-valid rows : 8,797  (used by options 2 and 8)
+Rows dropped for a missing date_added: 10
 Keystrokes      : 1, 2, 3, 4, 5, 6, 7, dark, 8, 2019, 9, 10, 0
 Covers          : menu options 1-10 and 0 (Quit)
 ```
 
-Key figures in the transcript: 6,131 Movies / 2,666 TV Shows; additions rising
-from 24 (2014) to a peak of 2,016 (2019); 123 unique countries; NumPy release-year
-statistics of mean 2014.18, median 2017, min 1925, max 2021, std 8.82.
+Key figures in the transcript: **6,131 Movies / 2,676 TV Shows**; additions
+rising from 24 (2014) to a peak of **2,016 (2019)**; **123** unique countries;
+NumPy release-year statistics of mean **2014.18**, median **2017**, min **1925**,
+max **2021**, std **8.82**. The file is 221 lines long.
 
 Section 11.2 of the notebook additionally demonstrates the error handling with
 an invalid menu choice (`99`), a non-numeric year (`abc`), an out-of-range year
@@ -342,17 +380,17 @@ printed in the notebook but not written to the file, so the file stays a clean
 ## Insights
 
 All figures below come from a real run of `notebooks/netflix_analysis.ipynb` on
-`data/netflix_titles.csv` (**8,807 raw rows → 8,797 after cleaning**) and are
-reproduced in `output/sample_output.txt`. The same three paragraphs are in
-section 12 of the notebook.
+`data/netflix_titles.csv` (**8,807 rows**) and are reproduced in
+`output/sample_output.txt`. The same three paragraphs are in section 13 of the
+notebook.
 
 **Insight 1 — A movie-led, recency-weighted library whose headline range is
-misleading.** Movies dominate the catalogue at **6,131 titles (69.69%)** against
-**2,666 TV Shows (30.31%)**. The NumPy statistics show what that catalogue is
+misleading.** Movies dominate the catalogue at **6,131 titles (69.62%)** against
+**2,676 TV Shows (30.38%)**. The NumPy statistics show what that catalogue is
 made of: mean release year **2014.18**, median **2017**, and an interquartile
 range of only **6 years** (Q1 2013, Q3 2019) — so the library is really a
 2013–2019 collection. The advertised span of **1925–2021** is misleading: the
-1925 minimum is a *single* title, *Pioneers: First Women Filmmakers\*. That one
+1925 minimum is a *single* title, *Pioneers: First Women Filmmakers\**. That one
 row is why the mean sits 2.82 years below the median and why the standard
 deviation (**8.82**) is larger than the IQR (6). For planning purposes the
 quartiles describe the catalogue far better than the min/max range.
@@ -365,19 +403,39 @@ below the peak. The mix also shifted: TV Shows were 29.4% of 2019 additions but
 33.7% of 2021 additions, so the slowdown is concentrated in Movies (1,424 → 993)
 rather than in series (592 → 505). Growth has clearly plateaued.
 
-**Insight 3 — The library is international and adult-oriented, and its
-country/rating metadata is not yet trustworthy.** The three largest genres are
-all broad, mainstream categories — **International Movies (2,752)**, **Dramas
-(2,427)** and **Comedies (1,674)** — and the audience skews adult:
-**TV-MA (3,205 / 36.43%)** plus **TV-14 (2,157 / 24.52%)** make up **60.95%**
-of the catalogue, while **G and PG together account for only 328 titles
-(3.73%)**. Geographically the United States dominates with **3,684 titles**,
-**3.52×** India's 1,046, yet **"Unknown" ranks third with 830 titles** because
-9.44% of rows have no country recorded. Three rows (`s5542`, `s5795`, `s5814`
-— the Louis C.K. specials) carry a *duration* value ("74 min", "84 min",
-"66 min") in the `rating` column, which is why the distribution shows 18
-distinct ratings. Rating and country analytics should therefore be cleaned at
-the source before they drive any decision.
+**Insight 3 — The library is international and adult-oriented, and some of its
+metadata is not yet trustworthy.** The three largest genres are all broad,
+mainstream categories — **International Movies (2,752)**, **Dramas (2,427)** and
+**Comedies (1,674)** — and the audience skews adult: **TV-MA (3,207 / 36.41%)**
+plus **TV-14 (2,160 / 24.53%)** make up **60.94%** of the catalogue, while
+**G and PG together account for only 328 titles (3.72%)**. Geographically the
+United States dominates with **3,690 titles**, **3.53×** India's 1,046, yet
+**"Unknown" ranks third with 831 titles** because 9.44% of rows have no country
+recorded. Three rows (`s5542`, `s5795`, `s5814` — the Louis C.K. specials) carry
+a *duration* value ("74 min", "84 min", "66 min") in the `rating` column, which
+is why the distribution shows 18 distinct ratings. Rating and country analytics
+should therefore be cleaned at the source before they drive any decision.
+
+---
+
+## Automated Tests
+
+Section 14 of the notebook runs a small `unittest` suite (**24 tests**) the
+moment the notebook is executed, so a regression is caught without a separate
+test command. Most tests use a tiny, made-up dataset — deliberately mixing
+single- and multi-value cells and missing values — so the cleaning, splitting
+and analysis rules are exercised independently of the real CSV. A handful of
+menu tests drive `main()` through `run_scripted_session()` to check the on-screen
+messages.
+
+| Test class | Covers |
+| --- | --- |
+| `TestCleaning` | Placeholder filling, date parsing, `year_added`, missing-file error |
+| `TestAnalysisLogic` | All ten option functions on the made-up dataset |
+| `TestEdgeCases` | Empty data does not crash any function |
+| `TestMenuBehaviour` | Quit, invalid choice, bad year, empty keyword, no-match messages |
+
+A successful run prints `ALL TESTS PASSED (24 run, 0 failures, 0 errors)`.
 
 ---
 
@@ -385,29 +443,29 @@ the source before they drive any decision.
 
 Every item below was executed against the **real** `data/netflix_titles.csv`
 using `jupyter nbconvert --to notebook --execute --inplace`, which reported
-**0 errors** across all 33 code cells.
+**0 errors** across all 42 code cells (including the 24 automated tests).
 
 | # | Check | Result |
 | --- | --- | --- |
 | 1 | Dataset loads successfully | **PASS** — 8,807 rows read from `data/netflix_titles.csv` |
-| 2 | Row count verified | **PASS** — 8,807 raw, 8,797 after cleaning |
+| 2 | Row count verified | **PASS** — 8,807 raw; 8,807 general; 8,797 date-valid |
 | 3 | Column count verified | **PASS** — 12 columns, names match the brief exactly |
-| 4 | Missing dataset produces a clear message | **PASS** — tested with no `data/` folder |
-| 5 | Data cleaning works | **PASS** — 4,307 missing cells → 3 |
-| 6 | `country` missing → `"Unknown"` | **PASS** — 831 filled; 830 titles remain `Unknown` |
+| 4 | Missing dataset produces a clear message | **PASS** — tested by `TestCleaning.test_missing_dataset_raises` |
+| 5 | Data cleaning works | **PASS** — 4,307 missing cells → 23 remaining (all intentional) |
+| 6 | `country` missing → `"Unknown"` | **PASS** — 831 filled; `Unknown` totals 831 |
 | 7 | `director` missing → `"Not Listed"` | **PASS** — 2,634 filled |
 | 8 | `cast` missing → `"Not Listed"` | **PASS** — 825 filled |
 | 9 | `rating` missing → `"Not Rated"` | **PASS** — 4 filled |
-| 10 | `date_added` missing/unusable handled | **PASS** — 10 rows dropped (8,807 → 8,797) |
+| 10 | `date_added` missing handled | **PASS** — 10 rows kept in `df`, excluded only from `df_dated` |
 | 11 | `year_added` created | **PASS** — 8,797 non-null, range 2008–2021 |
-| 12 | `release_year` / `release_decade` / `duration_minutes` | **PASS** — 0 missing years; `duration` keeps its 3 genuine nulls, which are reported |
-| 13 | `country_rows` / `genre_rows` exploded correctly | **PASS** — 10,833 country rows → 123 countries; 19,303 genre rows → 42 genres |
-| 14 | Validation table | **PASS** — 9 of 9 checks `PASS` |
-| 15 | Option 1 — Movies vs TV Shows | **PASS** — 6,131 / 2,666 |
+| 12 | `release_year` / `release_decade` / `duration_minutes` | **PASS** — 0 invalid years; `duration` keeps its 3 genuine nulls, which are reported |
+| 13 | `country_rows` / `genre_rows` exploded correctly | **PASS** — 10,843 country rows → 123 countries; 19,323 genre rows → 42 genres |
+| 14 | Validation table | **PASS** — 10 of 10 checks `PASS` |
+| 15 | Option 1 — Movies vs TV Shows | **PASS** — 6,131 / 2,676 |
 | 16 | Option 2 — Titles added each year | **PASS** — 14 years, 2008–2021 |
-| 17 | Option 3 — Top 10 countries | **PASS** — US 3,684 … Germany 226 |
+| 17 | Option 3 — Top 10 countries | **PASS** — US 3,690 … Germany 226 |
 | 18 | Option 4 — Top 5 genres | **PASS** — International Movies 2,752 … Documentaries 869 |
-| 19 | Option 5 — Rating distribution | **PASS** — 18 distinct ratings, TV-MA 3,205 (36.43%) |
+| 19 | Option 5 — Rating distribution | **PASS** — 18 distinct ratings, TV-MA 3,207 (36.41%) |
 | 20 | Option 6 — Oldest / newest release year | **PASS** — 1925 / 2021, titles identified |
 | 21 | Option 7 — Keyword search | **PASS** — `dark` → 39 real titles |
 | 22 | Option 8 — Content added in a year | **PASS** — 2019 → 2,016 titles |
@@ -421,13 +479,15 @@ using `jupyter nbconvert --to notebook --execute --inplace`, which reported
 | 30 | No-match search handled | **PASS** — "No titles found." |
 | 31 | Option 0 exits correctly | **PASS** — "Goodbye!" |
 | 32 | EOF / Ctrl+C handled | **PASS** — caught in `main()` |
-| 33 | Sample output created | **PASS** — `output/sample_output.txt`, 219 lines of real output |
-| 34 | Three insights written | **PASS** — notebook section 12 and this README |
-| 35 | Notebook executes with ZERO errors | **PASS** — 33 code cells, 0 errors |
-| 36 | Notebook contains actual outputs | **PASS** — executed in place, outputs stored |
-| 37 | `README.md` complete | **PASS** |
-| 38 | `requirements.txt` verified | **PASS** — `pandas>=2.0,<3.0`, `numpy>=1.24,<3.0`, `jupyter>=1.0.0` |
-| 39 | `.gitignore` present | **PASS** — dataset deliberately not ignored |
+| 33 | Six visualizations render | **PASS** — 6 PNG charts embedded in section 12 |
+| 34 | Automated tests | **PASS** — 24 tests, 0 failures, 0 errors |
+| 35 | Sample output created | **PASS** — `output/sample_output.txt`, 221 lines of real output |
+| 36 | Three insights written | **PASS** — notebook section 13 and this README |
+| 37 | Notebook executes with ZERO errors | **PASS** — 42 code cells, 0 errors |
+| 38 | Notebook contains actual outputs | **PASS** — executed in place, outputs stored |
+| 39 | `README.md` complete | **PASS** |
+| 40 | `requirements.txt` verified | **PASS** — `pandas>=2.0,<3.0`, `numpy>=1.24,<3.0`, `matplotlib>=3.7,<4.0`, `jupyter>=1.0.0` |
+| 41 | `.gitignore` present | **PASS** — dataset deliberately not ignored |
 
 ### Notes on the real data
 
@@ -437,6 +497,7 @@ notebook rather than hidden:
 * **3 titles have a duration in the `rating` column** (`s5542`, `s5795`,
   `s5814` — the Louis C.K. specials, whose `rating` reads "74 min", "84 min",
   "66 min"). This is why the rating distribution shows 18 distinct values.
-* **3 rows have a missing `duration`**, the only 3 missing cells that survive
-  cleaning. They are listed in the remaining-missing report rather than filled,
-  because the brief defines no placeholder for that column.
+* **3 rows have a missing `duration`**, part of the 23 missing cells that survive
+  cleaning (alongside the 10 `date_added`/`year_added` pairs). They are listed in
+  the remaining-missing report rather than filled, because the brief defines no
+  placeholder for that column.
